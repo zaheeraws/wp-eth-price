@@ -86,16 +86,16 @@ function ft_eth_price($atts = [], $content = null, $tag = ''){
 	// normalize attribute keys, lowercase
     $atts = array_change_key_case((array)$atts, CASE_LOWER);
     
-	$json_data = file_get_contents("https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH&tsyms=USD,EUR");
+	$json_data = file_get_contents("https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETN&tsyms=USD,EUR");
 	$a = json_decode($json_data);
 
     $usd = "";
     if( isset($atts['usd']) && $atts['usd'] == 1 ){
-    	$usd = "<h3>$ {$a->ETH->USD}</h3>";
+    	$usd = "<h3>$ {$a->ETN->USD}</h3>";
     }
     $ur = "";
     if( isset($atts['eur']) && $atts['eur'] == 1 ){
-    	$ur = "€{$a->ETH->EUR}</h3>";
+    	$ur = "€{$a->ETN->EUR}</h3>";
     }
 	echo "{$usd}<br/><h3>{$ur}";
 }
