@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Ethereum Price
  * Plugin URI:        https://github.com/zaheeraws/wp-eth-price.git
- * Description:       You can use it in your post by calling shortcode. [eth_price usd="1" eur="1"] put 0 instead of 1 to disable pricing for that currency. 
+ * Description:       You can use it in your post by calling shortcode. [eth_price coin="ETN" usd="1" eur="1"] put 0 instead of 1 to disable pricing for that currency. Write the coin short code and done. Total 3098 coins supported. see coin codes here: https://github.com/zaheeraws/wp-eth-price/blob/master/README.txt
  * Version:           1.0.0
  * Author:            fieztech
  * Author URI:        fieztech.com
@@ -85,17 +85,20 @@ function ft_eth_price($atts = [], $content = null, $tag = ''){
 	
 	// normalize attribute keys, lowercase
     $atts = array_change_key_case((array)$atts, CASE_LOWER);
-    
-	$json_data = file_get_contents("https://min-api.cryptocompare.com/data/pricemulti?fsyms=ETN&tsyms=USD,EUR");
+    $coin = "ETN";
+    if( isset($atts['coin']) && $atts['coin'] != "" ){
+    	$coin = $atts['coin'];
+    }
+	$json_data = file_get_contents("https://min-api.cryptocompare.com/data/pricemulti?fsyms={$coin}&tsyms=USD,EUR");
 	$a = json_decode($json_data);
 
     $usd = "";
     if( isset($atts['usd']) && $atts['usd'] == 1 ){
-    	$usd = "<h3>$ {$a->ETN->USD}</h3>";
+    	$usd = "<h3>$ {$a->{$coin}->USD}</h3>";
     }
     $ur = "";
     if( isset($atts['eur']) && $atts['eur'] == 1 ){
-    	$ur = "€{$a->ETN->EUR}</h3>";
+    	$ur = "€{$a->{$coin}->EUR}</h3>";
     }
 	echo "{$usd}<br/><h3>{$ur}";
 }
