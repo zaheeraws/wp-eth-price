@@ -86,7 +86,6 @@ run_wp_eth_price();
 
 function ft_eth_price($atts = [], $content = null, $tag = '')
 {
-
     // normalize attribute keys, lowercase
     $atts = array_change_key_case((array) $atts, CASE_LOWER);
     $coin = "ETN";
@@ -99,5 +98,19 @@ function ft_eth_price($atts = [], $content = null, $tag = '')
 
     require_once plugin_dir_path(__FILE__) .'./public/partials/plugin-view.php';
 }
-
 add_shortcode('eth_price_title', 'ft_eth_price');
+
+
+
+function ft_price_graph($atts = [], $content = null, $tag = '')
+{
+    $atts = array_change_key_case((array) $atts, CASE_LOWER);
+    $coin = "ETN";
+    if (isset($atts['coin']) && $atts['coin'] != "") {
+        $coin = $atts['coin'];
+    }
+    $json_data = file_get_contents("https://min-api.cryptocompare.com/data/histohour?fsym={$coin}&tsym=USD,EUR&limit=12");
+    require_once plugin_dir_path(__FILE__) .'./public/partials/plugin-view-graph.php';
+
+}
+add_shortcode( "eth_price_graph", "ft_price_graph" );
